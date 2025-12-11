@@ -3,7 +3,6 @@ import { loginUser, registerUser } from "@/actions/auth";
 import { Auth } from "@/components/auth";
 import { useTokenStore } from "@/store/token-store";
 import { useUserStore } from "@/store/user-store";
-import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 
@@ -73,6 +72,9 @@ export default function AuthPage() {
                 loading={isLoading}
                 setPassword={setPassword}
                 setEmail={setEmail}
+                setStep={setStep}
+                email={email}
+                password={password}
               />
             </>
           )}

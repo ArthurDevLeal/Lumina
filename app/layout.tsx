@@ -23,7 +23,7 @@ export default function RootLayout({
     <html lang="en">
       <body className={` ${inter.variable} font-inter antialiased`}>
         <ThemeProvider attribute="class" defaultTheme="light" enableSystem disableTransitionOnChange>
-          <Toaster position="top-center"/>
+          <Toaster position="top-right"/>
           {children}
         </ThemeProvider>
       </body>

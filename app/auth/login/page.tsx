@@ -35,7 +35,9 @@ export default function LoginPage() {
         setUser(loginReq.user);
         toast.success("User logged successfully!");
 
-        router.push("/dashboard");
+        setTimeout(() => {
+          router.push("/dashboard");
+        }, 2000);
       }
     } catch (error: any) {
       toast.error(error.message || "Error logging in");
@@ -57,7 +59,7 @@ export default function LoginPage() {
           setEmail={setEmail}
         />
       </Auth.Root>
-      <Auth.Redirect type="Login"/>
+      <Auth.Redirect type="Login" />
     </>
   );
 }

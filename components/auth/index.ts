@@ -5,8 +5,8 @@ import LoginForm from "./login/login-form";
 import LoginHeader from "./login/login-header";
 import RegisterForm from "./register/register-form";
 import RegisterHeader from "./register/register-header";
+import Root from "./root";
 import RedirectButton from "./user/redirect-button";
-import Root from "./user/root";
 import UserForm from "./user/user-form";
 import UserHeader from "./user/user-header";
 
