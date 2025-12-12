@@ -1,5 +1,5 @@
 "use client";
-import { CreditCard, LayoutDashboard, PieChart, Receipt, Settings, Target, Wallet } from "lucide-react";
+import { BanknoteArrowDown, CreditCard, LayoutDashboard, PieChart, Receipt, Settings, Target, Wallet } from "lucide-react";
 import { Sidebar } from ".";
 
 export default function DefaultSideBar() {
@@ -10,7 +10,8 @@ export default function DefaultSideBar() {
       <Sidebar.Navigation>
         <Sidebar.Section title="Main Menu">
           <Sidebar.Item to="/dashboard" icon={LayoutDashboard} label="Dashboard" />
-          <Sidebar.Item to="/dashboard/transactions" icon={Receipt} label="Transactions" />
+          <Sidebar.Item to="/dashboard/income" icon={Receipt} label="Income" />
+          <Sidebar.Item to="/dashboard/outcome" icon={BanknoteArrowDown} label="Outcome" />
           <Sidebar.Item to="/dashboard/goals" icon={Target} label="Savings Goals" />
         </Sidebar.Section>
 

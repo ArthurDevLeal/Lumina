@@ -33,7 +33,7 @@ export default function SidebarItem({ to, icon: Icon, label }: SidebarItemProps)
       {isActive && (
         <motion.div
           layoutId="activeSidebar"
-          className="absolute inset-0 bg-card-foreground rounded-xl -z-10 "
+          className="absolute inset-0 bg-card-foreground rounded-xl -z-10 shadow-lg"
           transition={{ type: "spring", stiffness: 300, damping: 30 }}
         />
       )}
