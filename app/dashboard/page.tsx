@@ -1,6 +1,5 @@
 "use client";
 import { Dashboard } from "@/components/dashboard";
-import { Button } from "@/components/ui/button";
 import { StatCard } from "@/components/ui/card";
 import {
   BanknoteArrowUp,
@@ -53,32 +52,26 @@ export default function Page() {
             </Dashboard.CreditCard.Content>
           </Dashboard.CreditCard.Root>
 
-          <div className="grid grid-cols-3 gap-2">
-            <Button variant={"secondary"} className="flex flex-col font-semibold">
-              <div
-                className={`w-10 h-10 rounded-full bg-accent/10 flex items-center justify-center backdrop-blur-md`}
-              >
-                <Receipt size={20} className={"text-accent"} />
-              </div>
-              Send
-            </Button>{" "}
-            <Button variant={"secondary"} className="flex flex-col font-semibold">
-              <div
-                className={`w-10 h-10 rounded-full bg-green-500/10 flex items-center justify-center backdrop-blur-md`}
-              >
-                <BanknoteArrowUp size={20} className={"text-green-700"} />
-              </div>
-              Recieve
-            </Button>{" "}
-            <Button variant={"secondary"} className="flex flex-col font-semibold">
-              <div
-                className={`w-10 h-10 rounded-full bg-red-500/10 flex items-center justify-center backdrop-blur-md`}
-              >
-                <Target size={20} className={"text-red-700"} />
-              </div>
-              Set Goal
-            </Button>{" "}
-          </div>
+          <Dashboard.FastActions.Root>
+            <Dashboard.FastActions.Button
+              Icon={Receipt}
+              bgColor="bg-accent/10"
+              iconColor="text-accent"
+              text="Send"
+            />
+            <Dashboard.FastActions.Button
+              Icon={BanknoteArrowUp}
+              bgColor="bg-green-500/10"
+              iconColor="text-green-700"
+              text="Recieve"
+            />
+            <Dashboard.FastActions.Button
+              Icon={Target}
+              bgColor="bg-red-500/10"
+              iconColor="text-red-700"
+              text="Set goal"
+            />
+          </Dashboard.FastActions.Root>
         </StatCard.Root>
       </div>
     </Dashboard.Root>
