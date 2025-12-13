@@ -1,4 +1,12 @@
 import CardRoot from "./card-root";
+import ChartCenterLabel from "./chart/chart-center-label";
+import DonutChart from "./chart/chart-donut";
+import ChartHeader from "./chart/chart-header";
+import ChartLegendItem from "./chart/chart-legend-item";
+import ChartLegendMore from "./chart/chart-legend-more";
+import ChartLegendRoot from "./chart/chart-legend-root";
+import ChartRoot from "./chart/chart-root";
+import CustomTooltip from "./chart/custom-tooltip";
 import ContentRoot from "./content-root";
 import CreditCardBalance from "./credit-card/credit-card-balance";
 import CreditCardContent from "./credit-card/credit-card-content";
@@ -34,5 +42,17 @@ export const Dashboard = {
   FastActions: {
     Root: FastActionsRoot,
     Button: FastActionButton,
+  },
+  Chart: {
+    Header: ChartHeader,
+    Label: ChartCenterLabel,
+    Donut: DonutChart,
+    Root: ChartRoot,
+    CustomTooltip: CustomTooltip,
+    Legend: {
+      Item: ChartLegendItem,
+      Root: ChartLegendRoot,
+      More: ChartLegendMore,
+    },
   },
 };

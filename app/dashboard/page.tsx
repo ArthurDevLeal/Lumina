@@ -12,6 +12,17 @@ import {
 } from "lucide-react";
 
 export default function Page() {
+  const chartData = [
+    { value: 1200, color: "#8b5cf6", name: "Food" },
+    { value: 800, color: "#f59e0b", name: "Transport" },
+    { value: 500, color: "#6366f1", name: "Entertainment" },
+    { value: 300, color: "#10b981", name: "Shopping" },
+    { value: 150, color: "#3b82f6", name: "Health" },
+    { value: 100, color: "#f43f5e", name: "Education" },
+  ];
+
+  const totalSpent = chartData.reduce((sum, item) => sum + item.value, 0);
+  const displayLimit = 5;
   return (
     <Dashboard.Root>
       <Dashboard.Header name="Arthur Leal" />
@@ -41,6 +52,39 @@ export default function Page() {
               <StatCard.Content variant="light" label="Total outcomes" value={3500} />
             </StatCard.Root>
           </Dashboard.Card.Root>
+
+          <StatCard.Root variant="light">
+            <Dashboard.Chart.Header />
+
+            <div className="grid grid-cols-2 gap-8">
+              <Dashboard.Chart.Root className="h-64">
+                <Dashboard.Chart.Donut
+                  data={chartData}
+                  innerRadius={80}
+                  outerRadius={110}
+                  customTooltip={Dashboard.Chart.CustomTooltip}
+                />
+                <Dashboard.Chart.Label value={2500} label="Total Spent" formatter={(val) => `$${val}`} />
+              </Dashboard.Chart.Root>
+
+              <Dashboard.Chart.Legend.Root>
+                <>
+                  {chartData.slice(0, displayLimit).map((item) => (
+                    <Dashboard.Chart.Legend.Item
+                      key={item.name}
+                      name={item.name}
+                      value={item.value}
+                      color={item.color}
+                      total={totalSpent}
+                    />
+                  ))}
+                  {chartData.length > displayLimit && (
+                    <Dashboard.Chart.Legend.More count={chartData.length - displayLimit} />
+                  )}
+                </>
+              </Dashboard.Chart.Legend.Root>
+            </div>
+          </StatCard.Root>
         </Dashboard.LeftContentRoot>
 
         <Dashboard.RightContentRoot>
