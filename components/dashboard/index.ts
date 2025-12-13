@@ -21,6 +21,8 @@ import Header from "./header";
 import LeftContentRoot from "./left-content-root";
 import RightContentRoot from "./right-content-root";
 import Root from "./root";
+import TransactionHeader from "./transactions/transaction-header";
+import TransactionItem from "./transactions/transaction-item";
 
 export const Dashboard = {
   Header: Header,
@@ -55,4 +57,9 @@ export const Dashboard = {
       More: ChartLegendMore,
     },
   },
+
+  Transaction:{
+    Item:TransactionItem,
+    Header:TransactionHeader,
+  } ,
 };

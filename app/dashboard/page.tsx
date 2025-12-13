@@ -3,8 +3,10 @@ import { Dashboard } from "@/components/dashboard";
 import { StatCard } from "@/components/ui/card";
 import {
   BanknoteArrowUp,
+  Coffee,
   CreditCardIcon,
   Receipt,
+  ShoppingBag,
   Target,
   TrendingDown,
   TrendingUp,
@@ -19,6 +21,32 @@ export default function Page() {
     { value: 300, color: "#10b981", name: "Shopping" },
     { value: 150, color: "#3b82f6", name: "Health" },
     { value: 100, color: "#f43f5e", name: "Education" },
+  ];
+  const transactions = [
+    {
+      id: "1",
+      description: "Grocery Shopping",
+      date: new Date(),
+      amount: -120.5,
+      type: "expense" as const,
+      icon: ShoppingBag,
+    },
+    {
+      id: "2",
+      description: "Salary",
+      date: new Date(),
+      amount: 3500,
+      type: "income" as const,
+      icon: TrendingUp,
+    },
+    {
+      id: "3",
+      description: "Coffee",
+      date: new Date(),
+      amount: -5.5,
+      type: "expense" as const,
+      icon: Coffee,
+    },
   ];
 
   const totalSpent = chartData.reduce((sum, item) => sum + item.value, 0);
@@ -53,7 +81,7 @@ export default function Page() {
             </StatCard.Root>
           </Dashboard.Card.Root>
 
-          <StatCard.Root variant="light">
+          <StatCard.Root variant="light" className="flex flex-col gap-4">
             <Dashboard.Chart.Header />
 
             <div className="grid grid-cols-2 gap-8">
@@ -102,23 +130,41 @@ export default function Page() {
             <Dashboard.FastActions.Root>
               <Dashboard.FastActions.Button
                 Icon={Receipt}
-                bgColor="bg-accent/10"
+                bgColor="bg-accent/10  group-hover:bg-accent/30"
                 iconColor="text-accent"
                 text="Send"
               />
               <Dashboard.FastActions.Button
                 Icon={BanknoteArrowUp}
-                bgColor="bg-green-500/10"
+                bgColor="bg-green-500/10 group-hover:bg-green-500/30"
                 iconColor="text-green-700"
                 text="Recieve"
               />
               <Dashboard.FastActions.Button
                 Icon={Target}
-                bgColor="bg-red-500/10"
-                iconColor="text-red-700"
+                bgColor="bg-destructive/20  group-hover:bg-destructive/30"
+                iconColor="text-destructive"
                 text="Set goal"
               />
             </Dashboard.FastActions.Root>
+          </StatCard.Root>
+
+          <StatCard.Root className="flex flex-col gap-4" variant="light">
+            <Dashboard.Transaction.Header />
+            <div className="flex flex-col gap-4">
+              {transactions.map((tx) => (
+                <Dashboard.Transaction.Item
+                  key={tx.id}
+                  id={tx.id}
+                  description={tx.description}
+                  date={tx.date}
+                  amount={tx.amount}
+                  type={tx.type}
+                  icon={tx.icon}
+                  onClick={() => console.log("Clicked:", tx.id)}
+                />
+              ))}
+            </div>
           </StatCard.Root>
         </Dashboard.RightContentRoot>
       </Dashboard.ContentRoot>

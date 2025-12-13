@@ -18,9 +18,9 @@ export default function FastActionButton({
     <Button
       onClick={() => (handleClick ? handleClick() : {})}
       variant={"secondary"}
-      className="flex flex-col font-semibold"
+      className="flex flex-col font-semibold group"
     >
-      <div className={`w-10 h-10 rounded-full ${bgColor} flex items-center justify-center backdrop-blur-md`}>
+      <div className={`w-10 h-10 rounded-full ${bgColor} flex items-center justify-center backdrop-blur-md transition-colors`}>
         <Icon size={20} className={iconColor} />
       </div>
       {text}
