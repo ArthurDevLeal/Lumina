@@ -1,5 +1,5 @@
 "use client";
-import { loginUser } from "@/actions/auth";
+import { loginUser } from "@/actions/user/auth";
 import { Auth } from "@/components/auth";
 import { useTokenStore } from "@/store/token-store";
 import { useUserStore } from "@/store/user-store";

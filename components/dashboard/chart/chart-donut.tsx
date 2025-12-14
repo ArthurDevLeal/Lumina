@@ -1,4 +1,7 @@
+"use client";
+
 import { Cell, Pie, PieChart, ResponsiveContainer, Tooltip } from "recharts";
+import { Dashboard } from "..";
 
 interface ChartData {
   value: number;
@@ -11,7 +14,6 @@ interface DonutChartProps {
   innerRadius?: number;
   outerRadius?: number;
   paddingAngle?: number;
-  customTooltip?: React.ComponentType<any>;
 }
 
 export default function DonutChart({
@@ -19,7 +21,6 @@ export default function DonutChart({
   innerRadius = 80,
   outerRadius = 110,
   paddingAngle = 5,
-  customTooltip,
 }: DonutChartProps) {
   return (
     <ResponsiveContainer width="100%" height="100%">
@@ -38,7 +39,7 @@ export default function DonutChart({
             <Cell key={`cell-${index}`} fill={entry.color} />
           ))}
         </Pie>
-        {customTooltip && <Tooltip content={customTooltip as any} wrapperStyle={{ zIndex: 1000 }} />}
+        <Tooltip content={Dashboard.Chart.CustomTooltip} wrapperStyle={{ zIndex: 1000 }} />
       </PieChart>
     </ResponsiveContainer>
   );

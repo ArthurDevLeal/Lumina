@@ -1,3 +1,4 @@
+"use client";
 import { ChildrenType } from "@/types/type";
 
 export default function FastActionsRoot({ children }: { children: ChildrenType }){

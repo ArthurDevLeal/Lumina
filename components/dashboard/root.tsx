@@ -1,3 +1,5 @@
+"use client";
+
 import { ChildrenType } from "@/types/type";
 import { motion } from "framer-motion";
 export default function Root({ children }: { children: ChildrenType }) {

@@ -1,6 +1,17 @@
-import api from "@/api/api";
-import { loginUserProps, loginUserPropsReturn, RegisterUserProps, RegisterUserPropsReturn } from "@/types/auth-type";
+import {
+  loginUserProps,
+  loginUserPropsReturn,
+  RegisterUserProps,
+  RegisterUserPropsReturn,
+} from "@/types/auth-type";
+import axios from "axios";
 
+const api = axios.create({
+  baseURL: process.env.NEXT_PUBLIC_DB_HOST,
+  headers: {
+    "Content-Type": "application/json",
+  },
+});
 export async function registerUser({
   name,
   email,
@@ -9,11 +20,9 @@ export async function registerUser({
   if (!name || name.trim().length < 2) {
     throw new Error("Name must be at least 2 characters long");
   }
-
   if (!email || !email.includes("@")) {
     throw new Error("Invalid email format");
   }
-
   if (!password || password.length < 6) {
     throw new Error("Password must be at least 6 characters long");
   }
@@ -40,14 +49,10 @@ export async function registerUser({
   }
 }
 
-export async function loginUser({
-  email,
-  password,
-}: loginUserProps): Promise<loginUserPropsReturn> {
+export async function loginUser({ email, password }: loginUserProps): Promise<loginUserPropsReturn> {
   if (!email || !email.includes("@")) {
     throw new Error("Invalid email format");
   }
-
   if (!password || password.length < 6) {
     throw new Error("Password must be at least 6 characters long");
   }

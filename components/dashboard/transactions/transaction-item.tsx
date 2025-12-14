@@ -1,14 +1,13 @@
 "use client";
 import { format } from "date-fns";
-import { LucideIcon } from "lucide-react";
+import { Receipt } from "lucide-react";
 
 interface TransactionItemProps {
   id: string;
   description: string;
   date: Date | string;
   amount: number;
-  type: "income" | "expense";
-  icon: LucideIcon;
+  type: string;
   onClick?: () => void;
 }
 
@@ -18,7 +17,6 @@ export default function TransactionItem({
   date,
   amount,
   type,
-  icon: Icon,
   onClick,
 }: TransactionItemProps) {
   const isIncome = type === "income";
@@ -35,7 +33,7 @@ export default function TransactionItem({
         <div
           className={`w-12 h-12 rounded-2xl flex items-center justify-center transition-colors ${bgColor}`}
         >
-          <Icon size={20} />
+          <Receipt size={20} />
         </div>
         <div>
           <h4 className="font-bold text-foreground text-sm">{description}</h4>
