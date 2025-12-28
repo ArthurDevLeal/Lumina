@@ -10,15 +10,12 @@ export default function DefaultSideBar() {
       <Sidebar.Navigation>
         <Sidebar.Section title="Main Menu">
           <Sidebar.Item to="/dashboard" icon={LayoutDashboard} label="Dashboard" />
-          <Sidebar.Item to="/dashboard/income" icon={Receipt} label="Income" />
-          <Sidebar.Item to="/dashboard/outcome" icon={BanknoteArrowDown} label="Outcome" />
+          <Sidebar.Item to="/dashboard/transactions" icon={Receipt} label="Transactions" />
           <Sidebar.Item to="/dashboard/goals" icon={Target} label="Savings Goals" />
         </Sidebar.Section>
 
         <Sidebar.Section title="Analysis">
           <Sidebar.Item to="/dashboard/reports" icon={PieChart} label="Reports" />
-          <Sidebar.Item to="/dashboard/budget" icon={Wallet} label="Budgeting" />
-          <Sidebar.Item to="/dashboard/cards" icon={CreditCard} label="My Cards" />
         </Sidebar.Section>
 
         <Sidebar.Section title="General">

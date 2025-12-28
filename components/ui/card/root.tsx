@@ -9,8 +9,8 @@ interface StatCardRootProps {
 export default function StatCardRoot({ children, variant = "dark", className = "" }: StatCardRootProps) {
   const baseClasses =
     variant === "dark"
-      ? "bg-primary text-primary-foreground shadow-lg"
-      : "bg-card text-card-foreground shadow-lg border-border border";
+      ? "bg-primary text-primary-foreground "
+      : "bg-card text-card-foreground border border-border";
 
   return (
     <div className={`rounded-4xl p-6 relative overflow-hidden transition-transform ${baseClasses} ${className}`}>

@@ -1,13 +1,25 @@
 "use client";
 
 import { getCategoryStats } from "@/actions/category/category-stats";
+import { createCategory } from "@/actions/category/create-category";
+import { createGoal } from "@/actions/goal/create-goal";
+import { getGoalStats } from "@/actions/goal/get-goal-stats";
+import { createIncomeTransaction } from "@/actions/income/create-income-transaction";
 import { getIncomeHistoryStats } from "@/actions/income/get-income-history";
 import { getIncomeTransactions } from "@/actions/income/income-transactions";
+import { updateIncomeHistoryTotals } from "@/actions/income/update-income-history";
+import { createOutcomeTransaction } from "@/actions/outcome/create-outcome";
 import { getOutcomeHistoryStats } from "@/actions/outcome/get-outcome-history";
 import { getOutcomeTransactions } from "@/actions/outcome/outcome-transactions";
+import { updateOutcomeHistoryTotals } from "@/actions/outcome/update-outcome-history";
 import { Dashboard } from "@/components/dashboard";
+import { GoalFormData } from "@/components/dashboard/fast-actions/goal/goal-fast-action-button";
 import { StatCard } from "@/components/ui/card";
+import ErrorMessage from "@/components/ui/error-message";
+import Loading from "@/components/ui/loading";
+import { useUserStore } from "@/store/user-store";
 import { CategoryStatsPropsReturn } from "@/types/category/type";
+import { GoalStatsPropsReturn } from "@/types/goal/type";
 import { IncomeHistoryPropsReturn, IncomeTransactionsPropsReturn } from "@/types/income/type";
 import { OutcomeHistoryPropsReturn } from "@/types/outcome/type";
 
@@ -32,6 +44,7 @@ export default function Page() {
     incomeTransactions: IncomeTransactionsPropsReturn;
     outcomeTransactions: OutcomeTransactionsPropsReturn;
     categoryData: CategoryStatsPropsReturn;
+    goalData: GoalStatsPropsReturn;
   } | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -41,151 +54,228 @@ export default function Page() {
   const [outcomeTotal, setOutcomeTotal] = useState(0);
   const [transactions, setTransactions] = useState<any[]>([]);
   const [chartData, setChartData] = useState<any[]>([]);
-
-  useEffect(() => {
-    async function fetchData() {
-      try {
-        const [incomeData, outcomeData, incomeTransactions, outcomeTransactions, categoryData] =
-          await Promise.all([
-            getIncomeHistoryStats(),
-            getOutcomeHistoryStats(),
-            getIncomeTransactions(),
-            getOutcomeTransactions(),
-            getCategoryStats(),
-          ]);
-
-        setData({ incomeData, outcomeData, incomeTransactions, outcomeTransactions, categoryData });
-
-        const totalIncome = incomeData?.data?.totalIncome;
-        const totalOutcome = outcomeData?.data?.totalOutcome;
-
-        setIncomeTotal(totalIncome);
-        setOutcomeTotal(totalOutcome);
-        setBalance(totalIncome - totalOutcome);
-
-        const allTransactions = calculateTransactions({ incomeTransactions, outcomeTransactions });
-        setTransactions(allTransactions);
-
-        if (categoryData?.data) {
-          const chart = processChartData({ categoryData });
-          setChartData(chart);
-        }
-      } catch (err: any) {
-        setError(err.message);
-      } finally {
-        setIsLoading(false);
-      }
-    }
-
-    fetchData();
-  }, []);
-
-  const handleAddTransaction = useCallback(async (newTransaction: any) => {
+  const { user } = useUserStore();
+  const fetchDashboardData = useCallback(async () => {
     try {
-      // Atualiza localmente primeiro (optimistic update)
-      setTransactions((prev) => [newTransaction, ...prev]);
+      setIsLoading(true);
 
-      // Atualiza totais
-      if (newTransaction.type === "income") {
-        setIncomeTotal((prev) => prev + newTransaction.amount);
-        setBalance((prev) => prev + newTransaction.amount);
-      } else {
-        setOutcomeTotal((prev) => prev + Math.abs(newTransaction.amount));
-        setBalance((prev) => prev - Math.abs(newTransaction.amount));
-      }
+      const [incomeData, outcomeData, incomeTransactions, outcomeTransactions, categoryData, goalData] =
+        await Promise.all([
+          getIncomeHistoryStats(),
+          getOutcomeHistoryStats(),
+          getIncomeTransactions(),
+          getOutcomeTransactions(),
+          getCategoryStats(),
+          getGoalStats(),
+        ]);
 
-      // Chama API para persistir
-      const response = await fetch("/api/transactions", {
-        method: "POST",
-        body: JSON.stringify(newTransaction),
-      });
+      setData({ incomeData, outcomeData, incomeTransactions, outcomeTransactions, categoryData, goalData });
 
-      if (!response.ok) throw new Error("Failed to add transaction");
+      const totalIncome = incomeData?.data?.totalIncome || 0;
+      const totalOutcome = outcomeData?.data?.totalOutcome || 0;
 
-      toast.success("Transaction added successfully!");
-    } catch (error) {
-      await Promise.all([getIncomeTransactions(), getOutcomeTransactions()]);
-      toast.error("Failed to add transaction");
-    }
-  }, []);
+      setIncomeTotal(totalIncome);
+      setOutcomeTotal(totalOutcome);
+      setBalance(totalIncome - totalOutcome);
 
-  const handleUpdateChart = useCallback(async () => {
-    try {
-      const categoryData = await getCategoryStats();
+      const allTransactions = calculateTransactions({ incomeTransactions, outcomeTransactions });
+      setTransactions(allTransactions);
 
       if (categoryData?.data) {
         const chart = processChartData({ categoryData });
         setChartData(chart);
       }
-    } catch (error) {
-      toast.error("Failed to update chart");
+
+      setError(null);
+    } catch (error: any) {
+      setError(error.message);
+      toast.error("Failed to load dashboard data");
+    } finally {
+      setIsLoading(false);
     }
   }, []);
 
-  const handleDeleteTransaction = useCallback(
-    async (id: string) => {
-      try {
-        const transaction = transactions.find((tx) => tx.id === id);
-        if (!transaction) return;
+  useEffect(() => {
+    fetchDashboardData();
+  }, [fetchDashboardData]);
 
-        // Optimistic update
-        setTransactions((prev) => prev.filter((tx) => tx.id !== id));
+  const handleSpendMoney = async ({
+    name,
+    value,
+    brand,
+    type,
+    categoryId,
+  }: {
+    name: string;
+    value: number;
+    brand?: string;
+    type: string;
+    categoryId: string;
+  }) => {
+    try {
+      await createOutcomeTransaction({
+        name,
+        value,
+        brand,
+        type,
+        categoryId,
+        outcomeHistoryId: data?.outcomeData.data.id as string,
+      });
 
-        if (transaction.type === "income") {
-          setIncomeTotal((prev) => prev - transaction.amount);
-          setBalance((prev) => prev - transaction.amount);
-        } else {
-          setOutcomeTotal((prev) => prev - Math.abs(transaction.amount));
-          setBalance((prev) => prev + Math.abs(transaction.amount));
-        }
+      const outcomeHistoryReq = await updateOutcomeHistoryTotals({
+        id: data?.outcomeData.data.id as string,
+      });
 
-        const response = await fetch(`/api/transactions/${id}`, {
-          method: "DELETE",
-        });
-
-        if (!response.ok) throw new Error("Failed to delete");
-
-        toast.success("Transaction deleted!");
-      } catch (error) {
-        // Refetch em caso de erro
-        await Promise.all([getIncomeTransactions(), getOutcomeTransactions()]);
-
-        toast.error("Failed to delete transaction");
+      const categoryData = await getCategoryStats();
+      if (categoryData?.data) {
+        const chart = processChartData({ categoryData });
+        setChartData(chart);
       }
-    },
-    [transactions]
-  );
 
-  if (isLoading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4" />
-          <p className="text-muted-foreground">Loading dashboard...</p>
-        </div>
-      </div>
-    );
-  }
+      const newOutcome = {
+        id: `temp-${Date.now()}`,
+        description: name,
+        date: new Date(),
+        amount: -value,
+        type: type,
+        brand,
+        categoryId,
+      };
 
-  if (error) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="text-center">
-          <p className="text-destructive font-bold mb-2">Error loading dashboard</p>
-          <p className="text-muted-foreground">{error}</p>
-        </div>
-      </div>
-    );
-  }
+      setTransactions((prev) => [newOutcome, ...prev]);
+      setOutcomeTotal((prev) => prev + value);
+      setBalance((prev) => prev - value);
 
-  if (!data) return null;
+      setData((prev) => {
+        if (!prev) return prev;
+        return {
+          ...prev,
+          outcomeData: outcomeHistoryReq,
+          categoryData,
+        };
+      });
+
+      toast.success("Expense added successfully!");
+    } catch (error: any) {
+      toast.error(error.message || "Error creating expense.");
+
+      await fetchDashboardData();
+    }
+  };
+  const handleCreateGoal = async ({ data }: { data: GoalFormData }) => {
+    try {
+      await createGoal(data);
+
+      const goalData = await getGoalStats();
+
+      setData((prev) => {
+        if (!prev) return prev;
+        return {
+          ...prev,
+          goalData,
+        };
+      });
+
+      toast.success("Goal created successfully!");
+    } catch (error: any) {
+      toast.error(error.message || "Error creating goal.");
+
+      await fetchDashboardData();
+    }
+  };
+
+  const handleCreateCategory = async ({ name }: { name: string }) => {
+    try {
+      await createCategory({ name });
+
+      const categoryData = await getCategoryStats();
+
+      setData((prev) => {
+        if (!prev) return prev;
+        return {
+          ...prev,
+          categoryData,
+        };
+      });
+
+      if (categoryData?.data) {
+        const chart = processChartData({ categoryData });
+        setChartData(chart);
+      }
+
+      toast.success("Category created successfully!");
+    } catch (error: any) {
+      toast.error(error.message || "Error creating category");
+    }
+  };
+
+  const handleReceiveMoney = async ({
+    name,
+    value,
+    brand,
+    type,
+    category,
+  }: {
+    name: string;
+    value: number;
+    brand?: string;
+    type: string;
+    category: string;
+  }) => {
+    try {
+      await createIncomeTransaction({
+        category,
+        incomeHistoryId: data?.incomeData.data.id as string,
+        name,
+        type,
+        brand,
+        value,
+      });
+
+      const incomeHistoryReq = await updateIncomeHistoryTotals({
+        id: data?.incomeData.data.id as string,
+      });
+
+      const newIncome = {
+        id: `temp-${Date.now()}`,
+        description: name,
+        date: new Date(),
+        amount: value,
+        type: type,
+        brand,
+        category,
+      };
+
+      setTransactions((prev) => [newIncome, ...prev]);
+      setIncomeTotal((prev) => prev + value);
+      setBalance((prev) => prev + value);
+
+      setData((prev) => {
+        if (!prev) return prev;
+        return {
+          ...prev,
+          incomeData: incomeHistoryReq,
+        };
+      });
+
+      toast.success("Income added successfully!");
+    } catch (error: any) {
+      toast.error(error.message || "Error adding income.");
+
+      await fetchDashboardData();
+    }
+  };
+
+  if (isLoading) return <Loading />;
+
+  if (error || !data) return <ErrorMessage isLoading={isLoading} error={error ? error : ""} />;
 
   const totalSpent = chartData.reduce((sum, item) => sum + item.value, 0);
   const displayLimit = 5;
 
   return (
     <Dashboard.Root>
-      <Dashboard.Header name="Arthur Leal" />
+      <Dashboard.Header name={user?.name as string} />
       <Dashboard.ContentRoot>
         <Dashboard.LeftContentRoot>
           <Dashboard.Card.Root>
@@ -247,57 +337,47 @@ export default function Page() {
               </Dashboard.Chart.Legend.Root>
             </div>
           </StatCard.Root>
+
+          <div className="flex flex-col w-full gap-4">
+            <Dashboard.Goals.Header />
+            <Dashboard.Goals.GoalsGrid goals={data.goalData} />
+          </div>
         </Dashboard.LeftContentRoot>
 
         <Dashboard.RightContentRoot>
           <StatCard.Root className="flex flex-col gap-4" variant="light">
             <Dashboard.CreditCard.CardHeader />
 
-            <Dashboard.CreditCard.Root>
+            {/*<Dashboard.CreditCard.Root>
               <Dashboard.CreditCard.Header icon={CreditCardIcon} brand="VISA" />
               <Dashboard.CreditCard.Content>
                 <Dashboard.CreditCard.Balance balance={balance} />
                 <Dashboard.CreditCard.Info cardHolder="Arthur" expiryDate="12/28" />
               </Dashboard.CreditCard.Content>
-            </Dashboard.CreditCard.Root>
+            </Dashboard.CreditCard.Root> */}
 
             <Dashboard.FastActions.Root>
               <Dashboard.FastActions.Button
                 Icon={<Receipt size={20} className="text-accent" />}
                 bgColor="bg-accent/10 group-hover:bg-accent/30"
-                iconColor="text-accent"
-                text="Send"
-                handleClick={() => {
-                  handleAddTransaction({
-                    id: Date.now().toString(),
-                    description: "New Expense",
-                    date: new Date(),
-                    amount: -50,
-                    type: "expense",
-                  });
-                }}
+                text="Spend"
+                type="outcome"
+                categories={data.categoryData}
+                handleClick={handleSpendMoney}
+                handleCreateCategory={handleCreateCategory}
               />
               <Dashboard.FastActions.Button
                 Icon={<BanknoteArrowUp size={20} className="text-green-700" />}
                 bgColor="bg-green-500/10 group-hover:bg-green-500/30"
-                iconColor="text-green-700"
                 text="Receive"
-                handleClick={() => {
-                  handleAddTransaction({
-                    id: Date.now().toString(),
-                    description: "New Income",
-                    date: new Date(),
-                    amount: 100,
-                    type: "income",
-                  });
-                }}
+                type="income"
+                handleClick={handleReceiveMoney}
               />
-              <Dashboard.FastActions.Button
+              <Dashboard.FastActions.Goal
                 Icon={<Target size={20} className="text-destructive" />}
                 bgColor="bg-destructive/20 group-hover:bg-destructive/30"
-                iconColor="text-destructive"
                 text="Set goal"
-                handleClick={() => console.log("Set goal")}
+                handleClick={handleCreateGoal}
               />
             </Dashboard.FastActions.Root>
           </StatCard.Root>
@@ -305,7 +385,7 @@ export default function Page() {
           <StatCard.Root className="flex flex-col gap-4" variant="light">
             <Dashboard.Transaction.Header />
             <div className="flex flex-col gap-4">
-              {transactions.map((tx) => (
+              {transactions.slice(0, displayLimit).map((tx) => (
                 <Dashboard.Transaction.Item
                   key={tx.id}
                   id={tx.id}
@@ -313,9 +393,11 @@ export default function Page() {
                   date={tx.date}
                   amount={tx.amount}
                   type={tx.type}
-                  onClick={() => handleDeleteTransaction(tx.id)}
                 />
               ))}
+              {transactions.length > displayLimit && (
+                <Dashboard.Transaction.More count={transactions.length - displayLimit} />
+              )}
             </div>
           </StatCard.Root>
         </Dashboard.RightContentRoot>

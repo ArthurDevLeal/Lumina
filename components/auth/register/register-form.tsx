@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
+import { InputAuth } from "@/components/ui/input-auth";
 import { Label } from "@/components/ui/label";
 import { Spinner } from "@/components/ui/spinner";
 import { ChevronLeft, ChevronRight } from "lucide-react";
@@ -29,7 +29,7 @@ export default function RegisterForm({
     <form className="flex flex-col gap-8">
       <div className="flex flex-col gap-1">
         <Label htmlFor="emailInput">Email adress</Label>
-        <Input
+        <InputAuth
           name="emailInput"
           id="emailInput"
           value={email}
@@ -39,7 +39,7 @@ export default function RegisterForm({
       </div>
       <div className="flex flex-col gap-1">
         <Label htmlFor="passwordInput">Password</Label>
-        <Input
+        <InputAuth
           name="passwordInput"
           id="passwordInput"
           type="password"
@@ -56,7 +56,7 @@ export default function RegisterForm({
         <Button
           disabled={isDisabled}
           onClick={() => handleButtonClick()}
-          className={`group ${loading ? "pr-8" : ""}`}
+          className={`group `}
         >
           {loading ? (
             <Spinner />

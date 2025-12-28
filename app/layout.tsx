@@ -21,7 +21,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={` ${inter.variable} font-inter antialiased`}>
+      <body className={` ${inter.variable} font-inter antialiased bg-background `}>
         <ThemeProvider attribute="class" defaultTheme="light" enableSystem disableTransitionOnChange>
           <Toaster position="top-right"/>
           {children}

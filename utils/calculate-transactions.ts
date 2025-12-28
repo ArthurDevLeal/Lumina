@@ -13,7 +13,7 @@ export const calculateTransactions = ({
       description: tx.name,
       date: tx.createdAt,
       amount: tx.value,
-      type: "income" as const,
+      type: tx.type,
       brand: tx.brand,
       category: tx.category,
     })) || [];
@@ -24,7 +24,7 @@ export const calculateTransactions = ({
       description: tx.name,
       date: tx.createdAt,
       amount: -tx.value,
-      type: "expense" as const,
+      type: tx.type,
       brand: tx.brand,
       categoryId: tx.categoryId,
     })) || [];

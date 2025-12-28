@@ -1,4 +1,3 @@
-// app/dashboard/layout.tsx ou components/layout.tsx
 import DefaultSideBar from "@/components/sidebar/default-side-bar";
 
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {

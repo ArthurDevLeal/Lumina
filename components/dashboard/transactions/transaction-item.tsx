@@ -19,11 +19,10 @@ export default function TransactionItem({
   type,
   onClick,
 }: TransactionItemProps) {
-  const isIncome = type === "income";
+  const isIncome = amount > 0;
   const bgColor = isIncome
     ? "bg-green-500/10 text-green-700 group-hover:bg-green-500/30"
-    : "bg-destructive/20 text-destructive group-hover:bg-destructive/30";
-  const amountColor = isIncome ? "text-emerald-600" : "text-destructive";
+    : "bg-destructive/5 text-destructive group-hover:bg-destructive/20";
   const formattedDate = format(new Date(date), "MMM d, h:mm a");
   const formattedAmount = `${isIncome ? "+" : "-"}$${Math.abs(amount)}`;
 
@@ -40,7 +39,7 @@ export default function TransactionItem({
           <p className="text-xs text-muted-foreground font-medium">{formattedDate}</p>
         </div>
       </div>
-      <span className={`font-bold text-sm ${amountColor}`}>{formattedAmount}</span>
+      <span className={`font-semibold text-sm text-muted-foreground `}>{formattedAmount}</span>
     </div>
   );
 }
