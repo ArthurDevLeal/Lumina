@@ -9,6 +9,8 @@ export function proxy(request: NextRequest) {
   const token = request.cookies.get("token")?.value;
   const hasToken = Boolean(token);
 
+  if (hasToken && path === "/") return NextResponse.redirect(new URL("/dashboard", request.url));
+
   if (hasToken && publicRoutes.includes(path)) {
     return NextResponse.redirect(new URL("/dashboard", request.url));
   }
