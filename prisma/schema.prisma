@@ -1,0 +1,124 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model User {
+  id             String           @id @default(cuid())
+  createdAt      DateTime         @default(now())
+  updatedAt      DateTime         @updatedAt
+  name           String?
+  email          String           @unique
+  password       String
+  avatarUrl      String?
+  balance        Int              @default(0)
+  saving         Int              @default(0)
+  outcomeHistory OutcomeHistory[]
+  incomeHistory  IncomeHistory[]
+  goals          Goal[]
+  categories     Category[]
+  outcomes       Outcome[]
+  incomes        Income[]
+}
+
+model OutcomeHistory {
+  id              String    @id @default(cuid())
+  userId          String
+  user            User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  totalOutcome    Int       @default(0)
+  fixedOutcome    Int       @default(0)
+  variableOutcome Int       @default(0)
+  listOfOutcomes  Outcome[]
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+}
+
+model Outcome {
+  id               String            @id @default(cuid())
+  outcomeHistoryId String
+  outcomeHistory   OutcomeHistory    @relation(fields: [outcomeHistoryId], references: [id], onDelete: Cascade)
+  userId           String
+  user             User              @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt        DateTime          @default(now())
+  value            Int               @default(0)
+  brand            String?
+  name             String
+  type             OutcomeIncomeType
+  categoryId       String
+  category         Category          @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+}
+
+model IncomeHistory {
+  id             String   @id @default(cuid())
+  userId         String
+  user           User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  totalIncome    Int      @default(0)
+  fixedIncome    Int      @default(0)
+  variableIncome Int      @default(0)
+  listOfIncomes  Income[]
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+}
+
+model Income {
+  id              String            @id @default(cuid())
+  incomeHistoryId String
+  incomeHistory   IncomeHistory     @relation(fields: [incomeHistoryId], references: [id], onDelete: Cascade)
+  userId          String
+  user            User              @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt       DateTime          @default(now())
+  value           Int               @default(0)
+  brand           String?
+  name            String
+  type            OutcomeIncomeType
+  category        String
+}
+
+model Goal {
+  id           String         @id @default(cuid())
+  createdAt    DateTime       @default(now())
+  updatedAt    DateTime       @updatedAt
+  name         String
+  type         String
+  targetValue  Float          @default(0)
+  currentValue Float          @default(0)
+  finalDate    DateTime?
+  status       String
+  userId       String
+  user         User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+  goalProgress GoalProgress[]
+}
+
+model GoalProgress {
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+  goalId    String
+  goal      Goal     @relation(fields: [goalId], references: [id], onDelete: Cascade)
+  amount    Int      @default(0)
+}
+
+model Category {
+  id         String    @id @default(cuid())
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
+  userId     String
+  user       User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  name       String
+  moneySpent Int       @default(0)
+  outcomes   Outcome[]
+}
+
+enum OutcomeIncomeType {
+  Fixed
+  Variable
+}
