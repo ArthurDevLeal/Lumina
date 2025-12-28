@@ -142,8 +142,7 @@ export default function TransactionsPage() {
 
   if (isLoading) return <Loading />;
 
-  const hasData = categoryData && monthlyData && chartData.length > 0;
-  if (error || !hasData) return <ErrorMessage isLoading={isLoading} error={error ? error : ""} />;
+  if (error) return <ErrorMessage isLoading={isLoading} error={error ? error : ""} />;
 
   return (
     <Dashboard.Root>
