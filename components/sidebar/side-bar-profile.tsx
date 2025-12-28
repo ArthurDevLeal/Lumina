@@ -15,6 +15,8 @@ export default function SidebarProfile() {
     removeUser();
     router.push("/auth/login");
   };
+  const avatarSeed = user?.avatarUrl || user?.name || "User";
+  const avatarUrl = `https://api.dicebear.com/7.x/avataaars/svg?seed=${avatarSeed}`;
 
   return (
     <div className="pt-4 border-t border-slate-200/60 bg-white/40 ">
@@ -23,7 +25,7 @@ export default function SidebarProfile() {
         className="flex items-center gap-3 p-3 rounded-2xl bg-card border border-border hover:bg-border transition-all cursor-pointer group"
       >
         <div className="w-10 h-10 rounded-full overflow-hidden border">
-          <img src={`https://api.dicebear.com/7.x/avataaars/svg?seed=${user?.avatarUrl}`} alt="Avatar" />
+          <img src={`https://api.dicebear.com/7.x/avataaars/svg?seed=${avatarUrl}`} alt="Avatar" />
         </div>
         <div className="flex-1 min-w-0">
           <p className="text-sm font-bold text-foreground truncate">{user?.name}</p>
