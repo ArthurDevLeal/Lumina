@@ -20,10 +20,10 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <body className={` ${inter.variable} font-inter antialiased bg-background `}>
         <ThemeProvider attribute="class" defaultTheme="light" enableSystem disableTransitionOnChange>
-          <Toaster position="top-right"/>
+          <Toaster position="top-right" />
           {children}
         </ThemeProvider>
       </body>

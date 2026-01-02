@@ -1,9 +1,10 @@
 "use client";
 import { addGoalProgress } from "@/actions/goal/add-goal-progress";
+import { createGoal } from "@/actions/goal/create-goal";
 import { getGoalStats } from "@/actions/goal/get-goal-stats";
 import { Dashboard } from "@/components/dashboard";
+import { GoalFormData } from "@/components/dashboard/fast-actions/goal/goal-fast-action-button";
 import { Goals } from "@/components/goals";
-import { GoalCard } from "@/components/goals/card";
 import ErrorMessage from "@/components/ui/error-message";
 import Loading from "@/components/ui/loading";
 import { GoalStatsPropsReturn } from "@/types/goal/type";
@@ -65,6 +66,28 @@ export default function goalPage() {
     }
   };
 
+  const handleCreateGoal = async ({ data }: { data: GoalFormData }) => {
+    try {
+      await createGoal(data);
+
+      const goalData = await getGoalStats();
+
+      setGoalsData((prev) => {
+        if (!prev) return prev;
+        return {
+          ...prev,
+          data: goalData.data,
+        };
+      });
+
+      toast.success("Goal created successfully!");
+    } catch (error: any) {
+      toast.error(error.message || "Error creating goal.");
+
+      await fetchGoals();
+    }
+  };
+
   if (isLoading) return <Loading />;
 
   if (error || !goalsData) {
@@ -82,7 +105,7 @@ export default function goalPage() {
             <Goals.Card.Action label="Deposit" onClick={handleDeposit} goalId={goal.id} />
           </Goals.Card.Root>
         ))}
-        <Goals.CreateGoal/>
+        <Goals.CreateGoal handleClick={handleCreateGoal} />
       </div>
     </Dashboard.Root>
   );
