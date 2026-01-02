@@ -117,7 +117,7 @@ export default function TransactionForm({
               </Label>
 
               {isCreatingCategory ? (
-                <div className="flex gap-2">
+                <div className="flex gap-2 items-center">
                   <Input
                     value={newCategoryName}
                     onChange={(e) => setNewCategoryName(e.target.value)}
@@ -158,7 +158,7 @@ export default function TransactionForm({
                   </Button>
                 </div>
               ) : (
-                <div className="flex gap-2">
+                <div className="flex gap-2 items-center">
                   <Select
                     value={formData.categoryId}
                     onValueChange={(value) => onFormDataChange({ categoryId: value })}
@@ -204,7 +204,8 @@ export default function TransactionForm({
 
         <SheetFooter className="flex flex-col justify-between gap-2 mt-4">
           <Button type="submit" size="lg" disabled={isLoading}>
-            {isLoading ? "Adding..." : `Create ${type === "income" ? "Income" : "Expense"}`}
+            {isLoading ? <Loader2 className="animate-spin" /> : <Plus />}
+            {!isLoading && `Create ${type === "income" ? "Income" : "Expense"}`}
           </Button>
         </SheetFooter>
       </form>

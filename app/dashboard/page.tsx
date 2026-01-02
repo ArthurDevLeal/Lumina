@@ -366,7 +366,7 @@ export default function Page() {
                   key={tx.id}
                   id={tx.id}
                   description={tx.description}
-                  date={tx.date}
+                  date={new Date(tx.date).toISOString()}
                   amount={tx.amount}
                   type={tx.type}
                 />
