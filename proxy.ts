@@ -1,21 +1,22 @@
 import { NextRequest, NextResponse } from "next/server";
 
 const publicRoutes = ["/auth/login", "/auth/register"];
-const privateRoutes = ["/dashboard", "/config"];
+const privateRoutes = ["/dashboard"];
 
 export function proxy(request: NextRequest) {
   const path = request.nextUrl.pathname;
-
   const token = request.cookies.get("token")?.value;
   const hasToken = Boolean(token);
 
-  if (hasToken && path === "/") return NextResponse.redirect(new URL("/dashboard", request.url));
+  if (path === "/" && hasToken) {
+    return NextResponse.redirect(new URL("/dashboard", request.url));
+  }
 
   if (hasToken && publicRoutes.includes(path)) {
     return NextResponse.redirect(new URL("/dashboard", request.url));
   }
 
-  const isPrivateRoute = path === "/" || privateRoutes.some((route) => path.startsWith(route));
+  const isPrivateRoute = privateRoutes.some((route) => path.startsWith(route));
 
   if (!hasToken && isPrivateRoute) {
     return NextResponse.redirect(new URL("/auth/login", request.url));
@@ -25,5 +26,5 @@ export function proxy(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/((?!_next/static|_next/image|favicon.ico|public/|.*\\.png$).*)"],
+  matcher: ["/((?!_next/static|_next/image|favicon.ico|.*\\.svg$).*)"],
 };

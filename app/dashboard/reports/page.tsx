@@ -195,7 +195,7 @@ export default function TransactionsPage() {
                 ))}
               </Dashboard.Chart.Legend.Root>
             ) : (
-              <div className="text-center py-4 text-gray-500">Nenhuma categoria com gastos registrados.</div>
+                <div className="text-center py-4 text-gray-500">No categories with recorded expenses.</div>
             )}
           </div>
         </Reports.Category.Root>
@@ -205,48 +205,48 @@ export default function TransactionsPage() {
           <div className="h-full pb-12 w-full">
             {monthlyChartData.length > 0 ? (
               <ResponsiveContainer width="100%" height="100%">
-                <BarChart data={monthlyChartData} barGap={2}>
-                  <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#94a3b8" />
-                  <XAxis
-                    dataKey="name"
-                    axisLine={false}
-                    tickLine={false}
-                    tick={{ fill: "#94a3b8", fontSize: 12, fontWeight: 600 }}
-                    dy={10}
-                  />
-                  <YAxis
-                    axisLine={false}
-                    tickLine={false}
-                    tick={{ fill: "#94a3b8", fontSize: 12 }}
-                    tickFormatter={(value) => `$${value / 1000}k`}
-                  />
-                  <Tooltip
-                    content={Dashboard.Chart.CustomTooltip}
-                    wrapperStyle={{ zIndex: 1000 }}
-                    formatter={(value, name) => {
-                      if (name === "income") return [`$${Number(value).toLocaleString()}`, "Income"];
-                      if (name === "expense") return [`$${Number(value).toLocaleString()}`, "Expense"];
-                      return [value, name];
-                    }}
-                    labelFormatter={(label) => `Período: ${label}`}
-                  />
+              <BarChart data={monthlyChartData} barGap={2}>
+                <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#94a3b8" />
+                <XAxis
+                dataKey="name"
+                axisLine={false}
+                tickLine={false}
+                tick={{ fill: "#94a3b8", fontSize: 12, fontWeight: 600 }}
+                dy={10}
+                />
+                <YAxis
+                axisLine={false}
+                tickLine={false}
+                tick={{ fill: "#94a3b8", fontSize: 12 }}
+                tickFormatter={(value) => `$${value / 1000}k`}
+                />
+                <Tooltip
+                content={Dashboard.Chart.CustomTooltip}
+                wrapperStyle={{ zIndex: 1000 }}
+                formatter={(value, name) => {
+                  if (name === "income") return [`$${Number(value).toLocaleString()}`, "Income"];
+                  if (name === "expense") return [`$${Number(value).toLocaleString()}`, "Expense"];
+                  return [value, name];
+                }}
+                labelFormatter={(label) => `Period: ${label}`}
+                />
 
-                  <Bar
-                    dataKey="income"
-                    className="fill-green-700"
-                    radius={[8, 8, 8, 8]}
-                    barSize={20}
-                    name="Income"
-                  />
-                  <Bar dataKey="expense" fill="#1e293b" radius={[8, 8, 8, 8]} barSize={20} name="Expense" />
-                </BarChart>
+                <Bar
+                dataKey="income"
+                className="fill-green-700"
+                radius={[8, 8, 8, 8]}
+                barSize={20}
+                name="Income"
+                />
+                <Bar dataKey="expense" fill="#1e293b" radius={[8, 8, 8, 8]} barSize={20} name="Expense" />
+              </BarChart>
               </ResponsiveContainer>
             ) : (
               <div className="h-full flex items-center justify-center">
-                <div className="text-center">
-                  <p className="text-gray-600">Nenhum dado mensal disponível.</p>
-                  <p className="text-sm text-gray-500">Adicione transações para ver o histórico.</p>
-                </div>
+              <div className="text-center">
+                <p className="text-gray-600">No monthly data available.</p>
+                <p className="text-sm text-gray-500">Add transactions to see history.</p>
+              </div>
               </div>
             )}
           </div>
