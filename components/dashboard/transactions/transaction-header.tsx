@@ -7,7 +7,7 @@ export default function TransactionHeader() {
   return (
     <div className="flex justify-between items-center">
       <h3 className="text-xl font-bold text-foreground">Recent activity</h3>
-      <Button onClick={()=>router.push("/dashboard/budget")} variant={"ghost"} size={"sm"}>
+      <Button onClick={()=>router.push("/dashboard/transactions")} variant={"ghost"} size={"sm"}>
         See all
       </Button>
     </div>

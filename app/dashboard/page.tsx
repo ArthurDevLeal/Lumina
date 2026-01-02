@@ -25,15 +25,7 @@ import { OutcomeHistoryPropsReturn } from "@/types/outcome/type";
 
 import { calculateTransactions } from "@/utils/calculate-transactions";
 import { processChartData } from "@/utils/process-chart-data";
-import {
-  BanknoteArrowUp,
-  CreditCardIcon,
-  Receipt,
-  Target,
-  TrendingDown,
-  TrendingUp,
-  Wallet,
-} from "lucide-react";
+import { BanknoteArrowUp, Receipt, Target, TrendingDown, TrendingUp, Wallet } from "lucide-react";
 import { useCallback, useEffect, useState } from "react";
 import { toast } from "sonner";
 
@@ -113,7 +105,7 @@ export default function Page() {
     categoryId: string;
   }) => {
     try {
-      await createOutcomeTransaction({
+      const OutcomeTransactionReq = await createOutcomeTransaction({
         name,
         value,
         brand,
@@ -132,15 +124,7 @@ export default function Page() {
         setChartData(chart);
       }
 
-      const newOutcome = {
-        id: `temp-${Date.now()}`,
-        description: name,
-        date: new Date(),
-        amount: -value,
-        type: type,
-        brand,
-        categoryId,
-      };
+      const newOutcome = OutcomeTransactionReq.data;
 
       setTransactions((prev) => [newOutcome, ...prev]);
       setOutcomeTotal((prev) => prev + value);
@@ -223,7 +207,7 @@ export default function Page() {
     category: string;
   }) => {
     try {
-      await createIncomeTransaction({
+      const incomeTransactionReq = await createIncomeTransaction({
         category,
         incomeHistoryId: data?.incomeData.data.id as string,
         name,
@@ -236,15 +220,7 @@ export default function Page() {
         id: data?.incomeData.data.id as string,
       });
 
-      const newIncome = {
-        id: `temp-${Date.now()}`,
-        description: name,
-        date: new Date(),
-        amount: value,
-        type: type,
-        brand,
-        category,
-      };
+      const newIncome = incomeTransactionReq.data;
 
       setTransactions((prev) => [newIncome, ...prev]);
       setIncomeTotal((prev) => prev + value);
