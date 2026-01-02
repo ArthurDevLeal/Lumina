@@ -1,6 +1,7 @@
 "use client";
 import { addGoalProgress } from "@/actions/goal/add-goal-progress";
 import { createGoal } from "@/actions/goal/create-goal";
+import { deleteGoal } from "@/actions/goal/delete-goal";
 import { getGoalStats } from "@/actions/goal/get-goal-stats";
 import { Dashboard } from "@/components/dashboard";
 import { GoalFormData } from "@/components/dashboard/fast-actions/goal/goal-fast-action-button";
@@ -88,6 +89,25 @@ export default function goalPage() {
     }
   };
 
+  const handleDeleteGoal = async (goalId: string) => {
+    try {
+      await deleteGoal({ id: goalId });
+
+      setGoalsData((prev) => {
+        if (!prev) return prev;
+        return {
+          ...prev,
+          data: prev.data.filter((goal) => goal.id !== goalId),
+        };
+      });
+
+      toast.success("Goal deleted successfully!");
+    } catch (error: any) {
+      toast.error(error.message || "Error deleting goal.");
+      await fetchGoals();
+    }
+  };
+
   if (isLoading) return <Loading />;
 
   if (error || !goalsData) {
@@ -99,7 +119,7 @@ export default function goalPage() {
       <div className="grid grid-cols-3 gap-4">
         {goalsData.data.map((goal) => (
           <Goals.Card.Root key={goal.id}>
-            <Goals.Card.Header onMenuClick={() => console.log("Menu clicked")} />
+            <Goals.Card.Header onMenuClick={() => handleDeleteGoal(goal.id)} />
             <Goals.Card.Info name={goal.name} targetValue={goal.targetValue} />
             <Goals.Card.Progress currentValue={goal.currentValue} targetValue={goal.targetValue} />
             <Goals.Card.Action label="Deposit" onClick={handleDeposit} goalId={goal.id} />

@@ -1,28 +1,51 @@
 "use client";
 import { Button } from "@/components/ui/button";
-import { ChildrenType } from "@/types/type";
-import { MoreVertical } from "lucide-react";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { MoreVertical, Trash2 } from "lucide-react";
+import { useState } from "react";
+import { toast } from "sonner";
 
 interface GoalCardHeaderProps {
-  icon?: ChildrenType;
-  onMenuClick?: () => void;
+  onMenuClick?: () => Promise<void>;
 }
 
-export default function GoalCardHeader({ icon, onMenuClick }: GoalCardHeaderProps) {
+export default function GoalCardHeader({ onMenuClick }: GoalCardHeaderProps) {
+  const [isDeleting, setIsDeleting] = useState(false);
+
+  const handleDelete = async () => {
+    setIsDeleting(true);
+    const toastId = toast.loading("Deleting goal...");
+
+    try {
+      await onMenuClick?.();
+      toast.dismiss(toastId);
+    } catch (error) {
+      toast.dismiss(toastId);
+    } finally {
+      setIsDeleting(false);
+    }
+  };
+
   return (
-    <div className={`flex ${icon ? "justify-between" : "justify-end"} items-start mb-8 relative z-10`}>
-      {icon && (
-        <div className="w-14 h-14 rounded-2xl flex items-center justify-center text-primary-foreground shadow-lg">
-          {icon}
-        </div>
-      )}
-      <Button
-        onClick={onMenuClick}
-        variant={"ghost"}
-        size={"icon-sm"}
-      >
-        <MoreVertical size={20} />
-      </Button>
+    <div className={`flex justify-end items-start mb-8 relative z-10`}>
+      <DropdownMenu>
+        <DropdownMenuTrigger asChild>
+          <Button variant={"ghost"} size={"icon-sm"} disabled={isDeleting}>
+            <MoreVertical size={20} />
+          </Button>
+        </DropdownMenuTrigger>
+        <DropdownMenuContent align="end">
+          <DropdownMenuItem onClick={handleDelete} disabled={isDeleting}>
+            <Trash2 size={16} className="mr-2" />
+            Delete Goal
+          </DropdownMenuItem>
+        </DropdownMenuContent>
+      </DropdownMenu>
     </div>
   );
 }
