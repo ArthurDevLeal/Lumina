@@ -124,7 +124,7 @@ export default function Page() {
         setChartData(chart);
       }
 
-      const newOutcome = OutcomeTransactionReq.data;
+      const newOutcome = { ...OutcomeTransactionReq.data, type: "outcome" };
 
       setTransactions((prev) => [newOutcome, ...prev]);
       setOutcomeTotal((prev) => prev + value);
@@ -220,7 +220,7 @@ export default function Page() {
         id: data?.incomeData.data.id as string,
       });
 
-      const newIncome = incomeTransactionReq.data;
+      const newIncome = { ...incomeTransactionReq.data, type: "income" };
 
       setTransactions((prev) => [newIncome, ...prev]);
       setIncomeTotal((prev) => prev + value);
