@@ -1,106 +1,108 @@
-# Lumina - Sales Simulator
+# Lumina - Simulador de Vendas
 
-A comprehensive sales simulator platform designed to provide realistic, data-driven scenarios for sales training and performance optimization.
+Uma plataforma completa de simulação de vendas projetada para fornecer cenários realistas e orientados por dados para treinamento comercial e otimização de desempenho.
 
-## Overview
+## Visão Geral
 
-Lumina is an advanced sales simulation tool that enables organizations to:
-- Analyze performance metrics and identify improvement areas
-- Generate actionable insights for revenue optimization
+O Lumina é uma ferramenta avançada de simulação de vendas que permite às organizações:
 
-## Features
+* Analisar métricas de desempenho e identificar áreas de melhoria
+* Gerar insights acionáveis para otimização de receita
 
-### Core Capabilities
-- **Realistic Scenarios**: Dynamic market conditions with real-world sales challenges
-- **Performance Analytics**: Detailed metrics on conversion rates, deal size, and cycle time
-- **Multi-Player Mode**: Competitive and collaborative training experiences
-- **Customizable Parameters**: Adjust market conditions, customer profiles, and product offerings
-- **AI-Powered Feedback**: Intelligent analysis of sales techniques and strategies
+## Funcionalidades
 
-### Advanced Features
-- Real-time collaboration tools for team training
-- Integration with CRM systems
-- Customizable learning paths based on skill levels
-- Comprehensive reporting and dashboard analytics
-- Historical data tracking for progress monitoring
+### Recursos Principais
 
-## Getting Started
+* **Cenários Realistas**: Condições dinâmicas de mercado com desafios de vendas do mundo real
+* **Análise de Desempenho**: Métricas detalhadas sobre taxas de conversão, tamanho dos negócios e tempo do ciclo de vendas
+* **Modo Multijogador**: Experiências de treinamento competitivas e colaborativas
+* **Parâmetros Personalizáveis**: Ajuste condições de mercado, perfis de clientes e ofertas de produtos
+* **Feedback com IA**: Análise inteligente de técnicas e estratégias de vendas
 
-### Prerequisites
-- Node.js 16.x or higher
-- npm or yarn package manager
-- Modern web browser (Chrome, Firefox, Safari, Edge)
+### Recursos Avançados
 
-### Installation
+* Ferramentas de colaboração em tempo real para treinamento em equipe
+* Integração com sistemas CRM
+* Trilhas de aprendizado personalizáveis com base no nível de habilidade
+* Relatórios completos e dashboards analíticos
+* Rastreamento histórico de dados para monitoramento de progresso
 
-1. Clone the repository:
+## Primeiros Passos
+
+### Pré-requisitos
+
+* Node.js 16.x ou superior
+* Gerenciador de pacotes npm ou yarn
+* Navegador moderno (Chrome, Firefox, Safari, Edge)
+
+### Instalação
+
+1. Clone o repositório:
+
 ```bash
 git clone https://github.com/ArthurDevLeal/Lumina.git
 cd Lumina
 ```
 
-2. Install dependencies:
+2. Instale as dependências:
+
 ```bash
 npm install
 ```
 
-3. Configure environment variables:
+3. Configure as variáveis de ambiente:
+
 ```bash
 cp .env.example .env
-# Update .env with your configuration
+# Atualize o arquivo .env com suas configurações
 ```
 
-4. Start the development server:
+4. Inicie o servidor de desenvolvimento:
+
 ```bash
 npm run dev
 ```
 
-The application will be available at `http://localhost:3000`
+A aplicação estará disponível em `http://localhost:3000`
 
-## Usage
+## Uso
 
-### Analyzing Results
+### Analisando Resultados
 
-- Access performance dashboards for comprehensive metrics
-- Track progress over time
+* Acesse dashboards de desempenho para métricas completas
+* Acompanhe o progresso ao longo do tempo
 
-## Contributing
+## Contribuindo
 
-We welcome contributions to Lumina! Please follow these steps:
+Contribuições para o Lumina são bem-vindas! Siga os passos abaixo:
 
-1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'Add amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
-5. Open a Pull Request
+1. Faça um fork do repositório
+2. Crie uma branch para sua funcionalidade (`git checkout -b feature/amazing-feature`)
+3. Faça commit das alterações (`git commit -m 'Add amazing feature'`)
+4. Envie para a branch (`git push origin feature/amazing-feature`)
+5. Abra um Pull Request
 
-Please ensure:
-- Code follows our style guide
-- Documentation is updated accordingly
-- Commits are clear and descriptive
+Certifique-se de que:
 
-For issues and questions, please open an [issue](https://github.com/ArthurDevLeal/Lumina/issues) on GitHub.
+* O código siga nosso guia de estilo
+* A documentação seja atualizada conforme necessário
+* Os commits sejam claros e descritivos
 
-## License
+Para dúvidas ou problemas, abra uma issue no GitHub:
+[Issues do Lumina](https://github.com/ArthurDevLeal/Lumina/issues?utm_source=chatgpt.com)
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+## Licença
 
+Este projeto está licenciado sob a Licença MIT — consulte o arquivo LICENSE para mais detalhes.
 
 ## Roadmap
 
-- [ ] Advanced AI-powered recommendations
-- [ ] Mobile app support
-- [ ] Advanced team collaboration features
+* [ ] Recomendações avançadas com IA
+* [ ] Suporte para aplicativo mobile
+* [ ] Recursos avançados de colaboração em equipe
 
-## Authors
+## Autores
 
-- **Arthur Dev Leal** - *Project Lead and Development*
-
-## Acknowledgments
-
-- Thanks to all contributors and testers
-- Special thanks to the sales professionals who provided valuable feedback
-- Community members for their support and suggestions
+* **Arthur Dev Leal** — *Liderança e Desenvolvimento do Projeto*
 
 ---
-
